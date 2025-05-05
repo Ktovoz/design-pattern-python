@@ -1,152 +1,119 @@
 from abc import ABC, abstractmethod
+from typing import List
 
-# =============== 抽象产品类 ===============
-
-class Smartphone(ABC):
-    """智能手机的抽象类"""
+# 抽象产品：处理器
+class Processor(ABC):
     @abstractmethod
-    def make_call(self):
+    def process(self):
         pass
 
+# 抽象产品：显示器
+class Display(ABC):
     @abstractmethod
-    def get_model_info(self):
+    def show(self):
         pass
 
-class Tablet(ABC):
-    """平板电脑的抽象类"""
+# 抽象产品：电池
+class Battery(ABC):
     @abstractmethod
-    def browse_internet(self):
+    def power(self):
         pass
 
+# 具体产品：高性能处理器
+class HighPerformanceProcessor(Processor):
+    def process(self):
+        print("使用高性能处理器处理任务")
+
+# 具体产品：普通性能处理器
+class StandardProcessor(Processor):
+    def process(self):
+        print("使用普通性能处理器处理任务")
+
+# 具体产品：高清显示器
+class HDDisplay(Display):
+    def show(self):
+        print("高清显示器显示内容")
+
+# 具体产品：普通显示器
+class StandardDisplay(Display):
+    def show(self):
+        print("普通显示器显示内容")
+
+# 具体产品：大容量电池
+class LargeBattery(Battery):
+    def power(self):
+        print("大容量电池供电")
+
+# 具体产品：标准电池
+class StandardBattery(Battery):
+    def power(self):
+        print("标准电池供电")
+
+# 抽象工厂
+class DeviceFactory(ABC):
     @abstractmethod
-    def get_screen_size(self):
+    def create_processor(self) -> Processor:
         pass
-
-class Earphone(ABC):
-    """耳机的抽象类"""
-    @abstractmethod
-    def play_music(self):
-        pass
-
-    @abstractmethod
-    def get_battery_life(self):
-        pass
-
-# =============== 具体产品类 - 苹果产品 ===============
-
-class IPhone(Smartphone):
-    """苹果手机"""
-    def make_call(self):
-        return "使用iPhone进行FaceTime通话"
-
-    def get_model_info(self):
-        return "iPhone 14 Pro Max"
-
-class IPad(Tablet):
-    """苹果平板"""
-    def browse_internet(self):
-        return "在iPad上使用Safari浏览网页"
-
-    def get_screen_size(self):
-        return "12.9英寸视网膜显示屏"
-
-class AirPods(Earphone):
-    """苹果耳机"""
-    def play_music(self):
-        return "使用AirPods播放音乐，支持空间音频"
-
-    def get_battery_life(self):
-        return "单次充电可使用6小时"
-
-# =============== 具体产品类 - 三星产品 ===============
-
-class GalaxyPhone(Smartphone):
-    """三星手机"""
-    def make_call(self):
-        return "使用Galaxy S23进行视频通话"
-
-    def get_model_info(self):
-        return "Galaxy S23 Ultra"
-
-class GalaxyTab(Tablet):
-    """三星平板"""
-    def browse_internet(self):
-        return "在Galaxy Tab上使用Chrome浏览网页"
-
-    def get_screen_size(self):
-        return "14.6英寸Super AMOLED显示屏"
-
-class GalaxyBuds(Earphone):
-    """三星耳机"""
-    def play_music(self):
-        return "使用Galaxy Buds播放音乐，支持主动降噪"
-
-    def get_battery_life(self):
-        return "单次充电可使用5小时"
-
-# =============== 抽象工厂 ===============
-
-class ElectronicsFactory(ABC):
-    """电子产品工厂的抽象类"""
-    @abstractmethod
-    def create_smartphone(self) -> Smartphone:
-        pass
-
-    @abstractmethod
-    def create_tablet(self) -> Tablet:
-        pass
-
-    @abstractmethod
-    def create_earphone(self) -> Earphone:
-        pass
-
-# =============== 具体工厂 ===============
-
-class AppleFactory(ElectronicsFactory):
-    """苹果产品工厂"""
-    def create_smartphone(self) -> Smartphone:
-        return IPhone()
-
-    def create_tablet(self) -> Tablet:
-        return IPad()
-
-    def create_earphone(self) -> Earphone:
-        return AirPods()
-
-class SamsungFactory(ElectronicsFactory):
-    """三星产品工厂"""
-    def create_smartphone(self) -> Smartphone:
-        return GalaxyPhone()
-
-    def create_tablet(self) -> Tablet:
-        return GalaxyTab()
-
-    def create_earphone(self) -> Earphone:
-        return GalaxyBuds()
-
-# =============== 客户端代码 ===============
-
-def client_code(factory: ElectronicsFactory):
-    """
-    客户端代码 - 使用工厂创建并测试电子产品
-    这段代码可以与任何工厂类一起工作，而不需要修改代码
-    """
-    smartphone = factory.create_smartphone()
-    tablet = factory.create_tablet()
-    earphone = factory.create_earphone()
-
-    print(f"手机型号: {smartphone.get_model_info()}")
-    print(f"通话功能: {smartphone.make_call()}")
-    print(f"平板显示: {tablet.get_screen_size()}")
-    print(f"平板功能: {tablet.browse_internet()}")
-    print(f"耳机功能: {earphone.play_music()}")
-    print(f"耳机续航: {earphone.get_battery_life()}")
-
-# =============== 测试代码 ===============
-
-if __name__ == "__main__":
-    print("测试苹果产品系列:")
-    client_code(AppleFactory())
     
-    print("\n测试三星产品系列:")
-    client_code(SamsungFactory())
+    @abstractmethod
+    def create_display(self) -> Display:
+        pass
+    
+    @abstractmethod
+    def create_battery(self) -> Battery:
+        pass
+
+# 具体工厂：高端设备工厂
+class PremiumDeviceFactory(DeviceFactory):
+    def create_processor(self) -> Processor:
+        return HighPerformanceProcessor()
+    
+    def create_display(self) -> Display:
+        return HDDisplay()
+    
+    def create_battery(self) -> Battery:
+        return LargeBattery()
+
+# 具体工厂：标准设备工厂
+class StandardDeviceFactory(DeviceFactory):
+    def create_processor(self) -> Processor:
+        return StandardProcessor()
+    
+    def create_display(self) -> Display:
+        return StandardDisplay()
+    
+    def create_battery(self) -> Battery:
+        return StandardBattery()
+
+# 设备类
+class Device:
+    def __init__(self, processor: Processor, display: Display, battery: Battery):
+        self.processor = processor
+        self.display = display
+        self.battery = battery
+    
+    def operate(self):
+        self.processor.process()
+        self.display.show()
+        self.battery.power()
+
+# 客户端代码
+def create_device(factory: DeviceFactory) -> Device:
+    processor = factory.create_processor()
+    display = factory.create_display()
+    battery = factory.create_battery()
+    return Device(processor, display, battery)
+
+# 使用示例
+if __name__ == "__main__":
+    # 创建高端设备
+    premium_factory = PremiumDeviceFactory()
+    print("创建高端设备：")
+    premium_device = create_device(premium_factory)
+    premium_device.operate()
+    
+    # 创建标准设备
+    standard_factory = StandardDeviceFactory()
+    print("\n创建标准设备：")
+    standard_device = create_device(standard_factory)
+    standard_device.operate()
