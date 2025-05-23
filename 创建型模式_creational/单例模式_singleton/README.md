@@ -43,7 +43,7 @@ class SingletonMeta(type):
 
 ## 实现示例
 
-本项目提供了三个不同难度级别的单例模式实现示例：
+本项目提供了四个不同难度级别的单例模式实现示例：
 
 ### 1. 基础版 (example-1.py) - 难度：★☆☆☆☆
 最简单的单例模式实现，适合初学者：
@@ -52,6 +52,24 @@ class SingletonMeta(type):
 - 包含简单的属性访问和实例验证
 - 适合理解单例模式的基本原理
 
+**运行方法：**
+```bash
+python example-1.py
+```
+
+**预期输出：**
+```
+第一个实例: 这是一个简单的单例示例
+第二个实例: 这是一个简单的单例示例
+
+验证是否是同一个对象:
+singleton1 的内存地址: 140712345678912
+singleton2 的内存地址: 140712345678912
+singleton1 和 singleton2 是否是同一个对象: True
+
+修改singleton1后，singleton2的值: 修改后的值
+```
+
 ### 2. 中级版 (example-2.py) - 难度：★★★☆☆
 线程安全的单例模式实现，适合进阶学习：
 - 使用双重检查锁定模式确保线程安全
@@ -59,13 +77,114 @@ class SingletonMeta(type):
 - 包含多线程操作示例
 - 展示了并发环境下的单例模式应用
 
-### 3. 高级版 (example-3.py) - 难度：★★★★★
+**运行方法：**
+```bash
+python example-2.py
+```
+
+**预期输出：**
+```
+线程 Thread-1 (worker) - 计数器: 1
+线程 Thread-2 (worker) - 计数器: 2
+线程 Thread-3 (worker) - 计数器: 3
+线程 Thread-1 (worker) - 计数器: 4
+线程 Thread-2 (worker) - 计数器: 5
+线程 Thread-3 (worker) - 计数器: 6
+线程 Thread-1 (worker) - 计数器: 7
+线程 Thread-2 (worker) - 计数器: 8
+线程 Thread-3 (worker) - 计数器: 9
+
+最终结果:
+计数器最终值: 9
+数据内容: {'key_1': 'value_1', 'key_2': 'value_2', ...}
+```
+
+### 3. 装饰器版 (example-decorator.py) - 难度：★★★☆☆
+使用装饰器实现单例模式，展示更灵活的实现方式：
+- 使用装饰器模式实现单例
+- 模拟数据库连接的实际应用场景
+- 展示装饰器单例的优势和使用方法
+- 包含完整的业务逻辑示例
+
+**运行方法：**
+```bash
+python example-decorator.py
+```
+
+**预期输出：**
+```
+=== 装饰器单例模式示例 ===
+
+1. 创建第一个数据库连接实例:
+创建数据库连接: localhost:5432/mydb
+
+2. 创建第二个数据库连接实例:
+
+3. 验证单例:
+db1 的内存地址: 140712345678912
+db2 的内存地址: 140712345678912
+db1 和 db2 是否是同一个对象: True
+
+4. 连接信息:
+db1 连接信息: {'host': 'localhost', 'port': 5432, 'database': 'mydb', 'is_connected': False, 'connection_count': 0}
+db2 连接信息: {'host': 'localhost', 'port': 5432, 'database': 'mydb', 'is_connected': False, 'connection_count': 0}
+
+5. 使用数据库连接:
+连接到数据库 localhost:5432/mydb
+执行查询: SELECT * FROM users
+查询结果: 查询结果: SELECT * FROM users 执行成功
+
+6. 通过db2查看连接状态:
+db2 连接状态: True
+执行查询: SELECT * FROM products
+
+7. 断开连接:
+断开数据库连接
+db1 连接状态: False
+```
+
+### 4. 高级版 (example-3.py) - 难度：★★★★★
 完整的配置管理器实现，适合实际项目应用：
-- 同时使用装饰器和元类两种方式实现单例
+- 使用元类实现单例模式
 - 实现了完整的配置管理功能
 - 包含文件持久化和线程安全
 - 使用类型提示和完整的错误处理
 - 展示了单例模式在实际项目中的应用
+
+**运行方法：**
+```bash
+python example-3.py
+```
+
+**预期输出：**
+```
+验证单例模式:
+config1 的内存地址: 140712345678912
+config2 的内存地址: 140712345678912
+config1 和 config2 是否是同一个对象: True
+
+初始配置:
+应用名称: 示例应用
+设置: {'debug': True, 'max_connections': 100}
+
+更新后的配置:
+应用名称: 新应用名称
+设置: {'debug': False, 'max_connections': 200}
+config2的应用名称: 新应用名称
+
+重置后的配置:
+应用名称: 示例应用
+设置: {'debug': True, 'max_connections': 100}
+```
+
+**注意：** 运行example-3.py会在当前目录生成一个`config.json`配置文件。
+
+## 学习路径建议
+
+1. **初学者**：从 `example-1.py` 开始，理解单例模式的基本概念
+2. **进阶学习**：学习 `example-2.py`，了解线程安全的重要性
+3. **装饰器方式**：研究 `example-decorator.py`，学习装饰器实现单例的优势
+4. **实际应用**：研究 `example-3.py`，学习如何在真实项目中应用单例模式
 
 ## 注意事项
 

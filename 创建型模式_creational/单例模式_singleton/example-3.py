@@ -31,11 +31,14 @@ class SingletonMeta(type):
                     cls._instances[cls] = super().__call__(*args, **kwargs)
         return cls._instances[cls]
 
-@singleton_decorator
 class ConfigManager(metaclass=SingletonMeta):
-    """配置管理器 - 同时使用装饰器和元类实现单例"""
+    """配置管理器 - 使用元类实现单例"""
     
     def __init__(self, config_file: str = "config.json"):
+        if hasattr(self, '_initialized'):
+            return
+        
+        self._initialized = True
         self._config_file = config_file
         self._config: Dict[str, Any] = {}
         self._lock = threading.Lock()
@@ -81,7 +84,10 @@ class ConfigManager(metaclass=SingletonMeta):
     def reset(self):
         """重置配置"""
         with self._lock:
-            self._config.clear()
+            # 删除配置文件
+            if os.path.exists(self._config_file):
+                os.remove(self._config_file)
+            # 重新加载默认配置
             self._load_config()
 
 def main():
@@ -97,8 +103,8 @@ def main():
     
     # 演示配置操作
     print("\n初始配置:")
-    print(config1.get("app_name"))
-    print(config1.get("settings"))
+    print(f"应用名称: {config1.get('app_name')}")
+    print(f"设置: {config1.get('settings')}")
     
     # 更新配置
     config1.set("app_name", "新应用名称")
@@ -110,14 +116,17 @@ def main():
     })
     
     print("\n更新后的配置:")
-    print(config1.get("app_name"))
-    print(config1.get("settings"))
+    print(f"应用名称: {config1.get('app_name')}")
+    print(f"设置: {config1.get('settings')}")
+    
+    # 验证第二个实例也被更新
+    print(f"config2的应用名称: {config2.get('app_name')}")
     
     # 重置配置
     config1.reset()
     print("\n重置后的配置:")
-    print(config1.get("app_name"))
-    print(config1.get("settings"))
+    print(f"应用名称: {config1.get('app_name')}")
+    print(f"设置: {config1.get('settings')}")
 
 if __name__ == "__main__":
     main() 
